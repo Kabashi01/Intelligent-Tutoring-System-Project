@@ -5,27 +5,74 @@
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
       <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
-
     <body>
+      <!-- start the header -->
+      <div class="navbar-fixed">
+        <nav class="teal" role="navigation">
+          <div class="row nav-wrapper container">
+             <a id="logo-container col s3 left" href="#" class="brand-logo " >ITS</a>
+             <ul class="col s6 push-s4 hide-on-med-and-down">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+            <!--Login Button-->
+            <a href="" class="right">Login</a>
+            <a href="" data-target ='mobel-nav' class="sidenav-trigger" ><i class="material-icons">menu</i></a> 
+          </div>
+        </nav>
+      </div>
+      <!-- mobile sidenav-->
+      <ul id='mobel-nav' class="sidenav">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <!-- end the header -->
+      <!-- start the slider -->
+      <div class="carousel carousel-slider">
+          <a class="carousel-item" href="#one!">
+            <img class="resposive-img" src="images/banner-bg.jpg">
+            <div class="caption">
+              <p></p>
+            </div>
+          </a>
+          <a class="carousel-item" href="#two!">
+            <img class="resposive-img" src="images/education.jpg">
+            <div class="caption">
+              <p></p>
+            </div>
+          </a>
+          <a class="carousel-item" href="#three!">
+            <img class="resposive-img" src="images/laptop.jpg">
+            <div class="caption">
+              <p></p>
+            </div>
+          </a>
+      </div>
 
-      <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo" >ITS</a>
-          <ul class="right hide-on-med-and-down">
-            <li><a href="#">Navbar Link</a></li>
-          </ul>
-          <ul id="nav-mobile" class="side-nav">
-            <li><a href="#">Navbar Link</a></li>
-          </ul>
-            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-        </div>
-      </nav>
-        <a href="#one!"><img class="responsive-img" src="book.jpg"></a>
+
+
       <!--Import jQuery before materialize.js-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+      <!-- import materialize css JS  -->
       <script type="text/javascript" src="js/materialize.min.js"></script>
+      <!-- JS code -->
+      <script>
+        //jquery queries to run materialize 
+        $(document).ready(function () {
+          //initalize the the javaScript component
+          $('.sidenav').sidenav();
+          $('.carousel.carousel-slider').carousel({fullWidth:true,indicators:true});
+
+        
+          
+        });
+      </script>
+
+
     </body>
   </html>
