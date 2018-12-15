@@ -5,7 +5,9 @@
     <div class="container">
         <div class="row">
                 <form action="includes/add-course-inc.php" method = "POST" class="col s12">
+                    <div class="card">
                         <div class="card-action teal lighten-1 white-text col s12">
+                            <h7>Add new Level</h7>
                         </div>
                         <div class="card-content row">
                             <div class="input-field col s8 ">
