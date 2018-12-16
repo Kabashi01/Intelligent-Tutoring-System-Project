@@ -15,7 +15,7 @@
             exit();
         }else{
             //get the user data from the DB
-            $sql = "select * from login where uid='$uid';";
+            $sql = "select * from users where uid='$uid';";
             $result = mysqli_query($conn,$sql);
             $result_check = mysqli_num_rows($result);
             if($result_check < 1){
