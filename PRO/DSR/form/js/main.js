@@ -549,7 +549,6 @@ $(document).ready(function () {
   //send data
   function manageData(key){
     if(key == 'researches'){
-   
         var name = $('#research-name');
         var researcher = $('#researcher-name');
         var startDate = $('#start-date');
@@ -595,7 +594,7 @@ $(document).ready(function () {
         });
         //end researches
     }else if(key == 'journals'){
-     
+
         var nameAr = $('#name-ar');
         var nameEn = $('#name-en');
         var editor = $('#editor-name');
@@ -666,7 +665,7 @@ $(document).ready(function () {
         });
     } //end journals
     else if(key == 'discharges'){
-       
+        
         var disName = $('#dis-name');
         var disPhone = $('#dis-phone');
         var disDegree = $('#dis-degree');
@@ -768,7 +767,6 @@ $(document).ready(function () {
                 foreignReason: foreignReason.val()
             },success: function (response) {
                 successReset(key , response);
-                
             }
         });
     } //end foreign

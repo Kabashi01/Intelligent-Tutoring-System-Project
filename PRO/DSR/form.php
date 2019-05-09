@@ -522,7 +522,7 @@
                             <div class="form-row mt-5">
                                 <div class="form-group col-5">
                                     <label for="research-name"> اسم المشروع / البحث :</label><!--(?!^ +$)^[ a-zA-Z\u0621-\u064A0-9]+$ arabic + english + numbers-->
-                                    <input type="text" class="form-control" id="research-name" name="research-name" pattern="(?!^ +$)^.+$" required>
+                                    <input autofocus type="text" class="form-control" id="research-name" name="research-name" pattern="(?!^ +$)^.+$" required>
                                 </div>
                                 <div class="form-group col-4 ui-widget  " >
                                     <label for="researcher-name">اسم الباحث :</label>

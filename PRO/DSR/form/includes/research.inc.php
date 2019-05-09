@@ -16,38 +16,27 @@
             $abstract = trim($conn->real_escape_string($_POST['abstract']));
             $device_array = array_map('trim',$_POST['device']);
             $device = $conn->real_escape_string(implode(" , ",$device_array));
-            $sql = $conn->query("SELECT * FROM teacher WHERE name = '$researcher'");
+            $sql = $conn->query("SELECT id FROM research WHERE `research-name` = '$name' AND `start-date` = '$startDate'");
             $result = $sql->fetch_assoc();
-            if($sql->num_rows > 0){
-                $researcher_id = $result['id'];
-                $sql = "INSERT INTO research(`research-name`,`researcher-name-id`,`start-date`,`end-date`,donor,amount,currency,rate,abstract,device)VALUES (?,?,?,?,?,?,?,?,?,?);";
-                $stmt = $conn->prepare($sql);
-                if($stmt){
-                    $stmt->bind_param('sssssiiiss',$name,$researcher_id,$startDate,$endDate,$donor,$amount,$currency,$rate,$abstract,$device);
-                    $stmt->execute();
-                    $stmt->close();
-                    exit("added successfuly");
+            if(!($sql->num_rows > 0)){
+                $sql = $conn->query("SELECT * FROM teacher WHERE name = '$researcher'");
+                $result = $sql->fetch_assoc();
+                if($sql->num_rows > 0){
+                    $researcher_id = $result['id'];
+                    $sql = "INSERT INTO research(`research-name`,`researcher-name-id`,`start-date`,`end-date`,donor,amount,currency,rate,abstract,device)VALUES (?,?,?,?,?,?,?,?,?,?);";
+                    $stmt = $conn->prepare($sql);
+                    if($stmt){
+                        $stmt->bind_param('sssssiiiss',$name,$researcher_id,$startDate,$endDate,$donor,$amount,$currency,$rate,$abstract,$device);
+                        $stmt->execute();
+                        $stmt->close();
+                        exit("Saved");
+                    }
+                }else{
+                    exit("Researcher Name Not Found");
                 }
             }else{
-                $researcher = trim($conn->real_escape_string($_POST['researcher']));
-                $department = trim($conn->real_escape_string($_POST['department']));
-                $degree = trim($conn->real_escape_string($_POST['degree']));
-                $sql = "INSERT INTO teacher(`name`,`dept_id`,`degree_id`) VALUES (?,?,?);";
-                $stmt = $conn->prepare($sql);
-                if($stmt){
-                    $stmt->bind_param('sii',$researcher,$department,$degree);
-                    $stmt->execute();
-                }
-                $researcher_id = $conn->insert_id; 
-                $sql = "INSERT INTO research(`research-name`,`researcher-name-id`,`start-date`,`end-date`,donor,amount,currency,rate,abstract,device)
-                VALUES (?,?,?,?,?,?,?,?,?,?);";
-                $stmt = $conn->prepare($sql);
-                if($stmt){
-                    $stmt->bind_param('sssssiiiss',$name,$researcher_id,$startDate,$endDate,$donor,$amount,$currency,$rate,$abstract,$device);
-                    $stmt->execute();
-                    exit("added successfuly");
-                }
-            }   
+                exit('Already Exist');
+            }
         }//end researches
         // save journal data
         if($_POST['key'] == 'journals'){
@@ -166,36 +155,15 @@
             if($collageConfirm == "" ) $collageConfirm = NULL;
             if($boardConfirm == "" ) $boardConfirm = NULL;
             //check if discharge name exist
-            $sql = $conn->query("SELECT * FROM teacher WHERE name = '$disName'");
+            $sql = $conn->query("SELECT discharge.id FROM discharge LEFT JOIN teacher ON discharge.teacher_id = teacher.id WHERE teacher.name = '$disName' AND discharge.`request-vacation-date-from` = '$requestVacationDateFrom';");
             $result = $sql->fetch_assoc();
-            if($sql->num_rows > 0){
-                $dis_id = $result['id'];
-                $sql = "INSERT INTO discharge(`teacher_id`,`designation-date`,`promotion-date`,`loan-type`,`loan-date-from`,`loan-date-to`,`loan-place`,
-                	    `vacation-date-from`,`vacation-date-to`,`vacation-place`,`grant-date-from-1`,`grant-date-to-1`,`grant-place-1`,`grant-date-from-2`,
-                        `grant-date-to-2`,`grant-place-2`,`request-vacation-date-from`,`request-vacation-date-to`,`request-vacation-num`,`edu-name`,`edu-countryf`,
-                        `edu-confirmf`,`activity`,`support-edu`,`request-support`,`department-confirmf`,`confirm-coveragef`,`collage-confirmf`,`board-confirmf`)
-                        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-                $stmt = $conn->prepare($sql);
-                if($stmt){
-                    $stmt->bind_param('isssssssssssssssssisiisssiiii',$dis_id,$designationDate,$promotionDate,$loanType,$loanDateFrom,$loanDateTo,$loanPlace,$vacationDateFrom,$vacationDateTo,$vacationPlace
-                    ,$grantDateFrom1,$grantDateTo1,$grantPlace1,$grantDateFrom2,$grantDateTo2,$grantPlace2,$requestVacationDateFrom,$requestVacationDateTo,
-                    $requestVacationNum,$eduName,$eduCountry,$eduConfirm,$activity,$supportEdu,$requestSupport,$deptConfirm,$confirmCoverage,$collageConfirm,
-                    $boardConfirm);
-                    $stmt->execute();
-                    $stmt->close();
-                    exit("added successfuly exist");
-                }
-                }else{
-                    $sql = "INSERT INTO teacher(name,`dept_id`,`degree_id`,phone) VALUES (?,?,?,?)";
-                    $stmt = $conn->prepare($sql);
-                    if($stmt){
-                        $stmt->bind_param('siis',$disName,$disDept,$disDegree,$disPhone);
-                        $stmt->execute();
-                        $stmt->close();
-                    }
-                    $dis_id = $conn->insert_id; 
+            if(!($sql->num_rows > 0)){
+                $sql = $conn->query("SELECT * FROM teacher WHERE name = '$disName'");
+                $result = $sql->fetch_assoc();
+                if($sql->num_rows > 0){
+                    $dis_id = $result['id'];
                     $sql = "INSERT INTO discharge(`teacher_id`,`designation-date`,`promotion-date`,`loan-type`,`loan-date-from`,`loan-date-to`,`loan-place`,
-                            `vacation-date-from`,`vacation-date-to`,`vacation-place`,`grant-date-from-1`,`grant-date-to-1`,`grant-place-1`,`grant-date-from-2`,
+                    	    `vacation-date-from`,`vacation-date-to`,`vacation-place`,`grant-date-from-1`,`grant-date-to-1`,`grant-place-1`,`grant-date-from-2`,
                             `grant-date-to-2`,`grant-place-2`,`request-vacation-date-from`,`request-vacation-date-to`,`request-vacation-num`,`edu-name`,`edu-countryf`,
                             `edu-confirmf`,`activity`,`support-edu`,`request-support`,`department-confirmf`,`confirm-coveragef`,`collage-confirmf`,`board-confirmf`)
                             VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
@@ -209,10 +177,16 @@
                         $stmt->close();
                         exit("added successfuly");
                     }
+                }else{
+                    exit("Teacher Not Found");
                 }   
+            }else{
+                exit("Already Exist");
+            }
         }//end of discharge
         //save foreign data
         if($_POST['key']=='foreigns'){
+            $collageExist = '';
             $name = trim($conn->real_escape_string($_POST['name']));
             $foreignEdu = trim($conn->real_escape_string($_POST['foreignEdu']));
             $foreignCollage = trim($conn->real_escape_string($_POST['foreignCollage']));
@@ -222,7 +196,10 @@
             }else{
                 $sql = $conn->query("SELECT id FROM collage WHERE name = '$receiveCollage'");
                 $result = $sql->fetch_assoc();
-                $receiveCollage = $result['id'];
+                if($sql->num_rows > 0){
+                    $receiveCollage = $result['id'];
+                    $collageExist = 'exist';
+                }
             }
             $startDate = trim($conn->real_escape_string($_POST['startDate']));
             $endDate = trim($conn->real_escape_string($_POST['endDate']));
@@ -230,16 +207,19 @@
 
             $sql = $conn->query("SELECT id FROM `foreign_teacher` WHERE name = '$name' AND `start-date` = '$startDate' AND reason = '$foreignReason'");
             if($sql->num_rows > 0){
-                exit("already exist");
+                exit("Already Exist");
             }else{
-                
-                $sql = "INSERT INTO `foreign_teacher`(`name`,edu,collage,`receive`,`start-date`,`end-date`,reason) VALUES (?,?,?,?,?,?,?)";
-                $stmt = $conn->prepare($sql);
-                if($stmt){
-                    $stmt->bind_param('sssisss',$name,$foreignEdu,$foreignCollage,$receiveCollage,$startDate,$endDate,$foreignReason);
-                    $stmt->execute();
-                    $stmt->close();
-                    exit("added successfully");
+                if($collageExist == 'exist'){
+                    $sql = "INSERT INTO `foreign_teacher`(`name`,edu,collage,`receive`,`start-date`,`end-date`,reason) VALUES (?,?,?,?,?,?,?)";
+                    $stmt = $conn->prepare($sql);
+                    if($stmt){
+                        $stmt->bind_param('sssisss',$name,$foreignEdu,$foreignCollage,$receiveCollage,$startDate,$endDate,$foreignReason);
+                        $stmt->execute();
+                        $stmt->close();
+                        exit("added successfully");
+                    }
+                }else{
+                    exit("Collage Not Found");
                 }
             }   
         }//end foreigns
@@ -257,7 +237,7 @@
 
             $sql = $conn->query("SELECT id FROM workshop WHERE name = '$name' AND `start-date` = '$startDate' AND presenter = '$presenter'");
             if($sql->num_rows > 0){
-                exit("already exist");
+                exit("Already Exist");
             }else{
                 $sql = "INSERT INTO workshop(name,place,`participant-num`,presenter,`presenter-degree`,`start-date`,`end-date`,participant) VALUES (?,?,?,?,?,?,?,?)";
                 $stmt = $conn->prepare($sql);
@@ -282,7 +262,7 @@
             $participant = $conn->real_escape_string(implode(" , ",$participant_array));
             $sql = $conn->query("SELECT id FROM exhibition WHERE name = '$name' AND `start-date` = '$startDate' AND presenter = '$presenter'");
             if($sql->num_rows > 0){
-                exit("already exist");
+                exit("Already Exist");
             }else{
                 $sql = "INSERT INTO exhibition(name,place,`participant-num`,presenter,`presenter-degree`,`start-date`,`end-date`,participant) VALUES (?,?,?,?,?,?,?,?)";
                 $stmt = $conn->prepare($sql);
@@ -308,7 +288,7 @@
 
             $sql = $conn->query("SELECT id FROM training WHERE name = '$name' AND `start-date` = '$startDate' AND presenter = '$presenter'");
             if($sql->num_rows > 0){
-                exit("already exist");
+                exit("Already Exist");
             }else{
                 $sql = "INSERT INTO training(name,place,`participant-num`,presenter,`presenter-degree`,`start-date`,`end-date`,participant) VALUES (?,?,?,?,?,?,?,?)";
                 $stmt = $conn->prepare($sql);
